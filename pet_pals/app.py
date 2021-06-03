@@ -24,7 +24,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-from .models import Pet
+import models as m
 
 
 # create route that renders index.html template
@@ -41,7 +41,7 @@ def send():
         lat = request.form["petLat"]
         lon = request.form["petLon"]
 
-        pet = Pet(name=name, lat=lat, lon=lon)
+        pet = m.Pet(name=name, lat=lat, lon=lon)
         db.session.add(pet)
         db.session.commit()
         return redirect("/", code=302)
@@ -51,7 +51,7 @@ def send():
 
 @app.route("/api/pals")
 def pals():
-    results = db.session.query(Pet.name, Pet.lat, Pet.lon).all()
+    results = db.session.query(m.Pet.name, m.Pet.lat, m.Pet.lon).all()
 
     hover_text = [result[0] for result in results]
     lat = [result[1] for result in results]
